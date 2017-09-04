@@ -66,11 +66,9 @@ public class AllClassesAdapter extends RecyclerView.Adapter<AllClassesAdapter.Re
             imgv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent i = new Intent(context, BooksList.class);
-//                    int classno = getAdapterPosition() + 1;
-//                    Toast.makeText(context, "Class " + classno, Toast.LENGTH_SHORT).show();
-//                    i.putExtra("Classno", classno);
-//                    context.startActivity(i);
+                    Intent i = new Intent(context, BooksLists.class);
+                    context.startActivity(i);
+
                 }
             });
         }
