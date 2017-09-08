@@ -14,17 +14,16 @@
 
         <ImageView
             android:id="@+id/classpic"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="650dp"
+            android:layout_height="130dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/penx"/>
+            android:src="@drawable/zxc"/>
 
         <TextView
             android:id="@+id/classname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/classno_photo"
             android:gravity="center"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"

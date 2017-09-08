@@ -4,16 +4,16 @@ package com.jetslice.referncert;
  * Created by shubham on 4/9/17.
  */
 
-import android.support.v7.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,6 +33,8 @@ public class AllClassesAdapter extends RecyclerView.Adapter<AllClassesAdapter.Re
     public RecyclerViewHolders onCreateViewHolder(ViewGroup viewGroup, int i) {
         View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.class_number_item, null);
         RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView);
+        Animation slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
+        layoutView.startAnimation(slideUpAnimation);
         return rcv;
     }
 
@@ -40,8 +42,9 @@ public class AllClassesAdapter extends RecyclerView.Adapter<AllClassesAdapter.Re
     public void onBindViewHolder(RecyclerViewHolders recyclerViewHolders, int i) {
         int num = i + 1;
         recyclerViewHolders.countryName.setText("Class " + num);
-        recyclerViewHolders.imgv.setImageResource(R.drawable.tenth);
+        recyclerViewHolders.imgv.setImageResource(R.drawable.zxc);
     }
+
 
     @Override
     public int getItemCount() {
@@ -67,8 +70,8 @@ public class AllClassesAdapter extends RecyclerView.Adapter<AllClassesAdapter.Re
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, BooksLists.class);
+                    i.putExtra("Classno",getAdapterPosition()+1);
                     context.startActivity(i);
-
                 }
             });
         }
