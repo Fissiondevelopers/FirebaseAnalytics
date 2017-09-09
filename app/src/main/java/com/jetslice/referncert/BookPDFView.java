@@ -3,6 +3,7 @@ package com.jetslice.referncert;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -13,34 +14,51 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class BookPDFView extends AppCompatActivity {
     private StorageReference mStorageRef;
+    ArrayList<String> chapterset;
     File localFile;
     PDFView pdfView;
     String bookname;
-    int clsno,chapterno;
+    int clsno, chapterno;
+    static int adfreq = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdfview);
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        pdfView= (PDFView) findViewById(R.id.pdfView);
-        bookname=getIntent().getStringExtra("iBookname");
-        clsno=getIntent().getIntExtra("iClassno",4);
-        chapterno=getIntent().getIntExtra("iChapter",3);
-        ArrayList<String> chapterset=getchapterset();
+        pdfView = (PDFView) findViewById(R.id.pdfView);
+        bookname = getIntent().getStringExtra("iBookname");
+        clsno = getIntent().getIntExtra("iClassno", 4);
+        chapterno = getIntent().getIntExtra("iChapter", 3);
+        chapterset = getchapterset();
+        Toast.makeText(getBaseContext(), "Class " + clsno + "/" + bookname.trim() + "/" + chapterset.get(chapterno) + ".pdf", Toast.LENGTH_SHORT).show();
+        String url = "Class " + clsno + "/" + bookname + "/" + chapterset.get(chapterno) + ".pdf";
+//        mAdView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                Toast.makeText(getBaseContext(),"Ad loaded "+adfreq,Toast.LENGTH_SHORT).show();
+//                ++adfreq;
+//            }
+//        });
 
-        Toast.makeText(getBaseContext(),"Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(chapterno)+".pdf",Toast.LENGTH_SHORT).show();
-        String url="Class "+clsno+"/"+bookname+"/"+chapterset.get(chapterno)+".pdf";
-        dotask(clsno,bookname.trim(),chapterset.get(chapterno));
+        File loadfile=new File("/sdcard/ReferNcert/Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(chapterno)+".pdf");
+        if(loadfile.exists()){
+            loadinpdf(loadfile);
+            //TODO: add indicator in chapter card view signifying that file is already downloaded
+        }else
+        {
+            Log.e("SA", "FSFSF");
+            dotask(clsno,bookname.trim(),chapterset.get(chapterno));
+
+        }
     }
 
     private ArrayList<String> getchapterset() {
-        ArrayList<String> chapters=new ArrayList<>();
+        ArrayList<String> chapters = new ArrayList<>();
         chapters.add("Chapter01");
         chapters.add("Chapter02");
         chapters.add("Chapter03");
@@ -80,16 +98,18 @@ public class BookPDFView extends AppCompatActivity {
 
     }
 
-    private void dotask(int clsno, final String booknamex, final String url) {
-        StorageReference riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+url+".pdf");
-        localFile = null;
-        try {
-            localFile = File.createTempFile("chap10", "pdf");
-            Toast.makeText(getBaseContext(),"Downloading......."+booknamex,Toast.LENGTH_SHORT).show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void dotask(int clsno, final String booknamex, final String chpno) {
+        StorageReference riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
+        File rootPath = new File("/sdcard/ReferNcert/Class "+clsno+"/"+booknamex+"/");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
         }
+
+        String savingName=chapterset.get(chapterno)+".pdf";
+
+        localFile = new File(rootPath,savingName);
+
+
 
         riversRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -98,12 +118,12 @@ public class BookPDFView extends AppCompatActivity {
                         //TODO
                         //Add Progress Bar here
                         loadinpdf(localFile);
-                        Toast.makeText(getBaseContext(),"Loaded",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getBaseContext(),"Failed"+url+exception,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Failed" + exception, Toast.LENGTH_SHORT).show();
             }
         });
     }
