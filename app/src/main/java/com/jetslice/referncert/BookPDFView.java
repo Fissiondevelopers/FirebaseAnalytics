@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -32,12 +35,15 @@ public class BookPDFView extends AppCompatActivity {
     int clsno, chapterno;
     static int adfreq = 0;
     private ElasticDownloadView bnp;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdfview);
+        mAdView= (AdView) findViewById(R.id.adView);
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        bnp= (ElasticDownloadView) findViewById(R.id.elastic_download_view);
         pdfView = (PDFView) findViewById(R.id.pdfView);
         bookname = getIntent().getStringExtra("iBookname");
         clsno = getIntent().getIntExtra("iClassno", 4);
@@ -45,17 +51,29 @@ public class BookPDFView extends AppCompatActivity {
         chapterset = getchapterset();
         Toast.makeText(getBaseContext(), "Class " + clsno + "/" + bookname.trim() + "/" + chapterset.get(chapterno) + ".pdf", Toast.LENGTH_SHORT).show();
         String url = "Class " + clsno + "/" + bookname + "/" + chapterset.get(chapterno) + ".pdf";
-//        mAdView.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                Toast.makeText(getBaseContext(),"Ad loaded "+adfreq,Toast.LENGTH_SHORT).show();
-//                ++adfreq;
-//            }
-//        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Toast.makeText(getBaseContext(),"Ad loaded "+adfreq,Toast.LENGTH_SHORT).show();
+                ++adfreq;
+            }
+        });
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Toast.makeText(getBaseContext(),"Ad Count = "+adfreq,Toast.LENGTH_SHORT).show();
+                ++adfreq;
 
+            }
+
+        });
         File loadfile=new File("/sdcard/ReferNcert/Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(chapterno)+".pdf");
         if(loadfile.exists()){
             loadinpdf(loadfile);
+            bnp.setVisibility(View.GONE);
+            pdfView.setVisibility(View.VISIBLE);
             //TODO: add indicator in chapter card view signifying that file is already downloaded
         }else
         {
@@ -107,7 +125,6 @@ public class BookPDFView extends AppCompatActivity {
     }
 
     private void dotask(int clsno, final String booknamex, final String chpno) {
-        bnp= (ElasticDownloadView) findViewById(R.id.elastic_download_view);
         StorageReference riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
         File rootPath = new File("/sdcard/ReferNcert/Class "+clsno+"/"+booknamex+"/");
         if(!rootPath.exists()) {
@@ -125,12 +142,11 @@ public class BookPDFView extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        //TODO
-                        //Add Progress Bar here
                         loadinpdf(localFile);
                         Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
                         bnp.onEnterAnimationFinished();
                         bnp.success();
+                        bnp.setVisibility(View.GONE);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -152,7 +168,7 @@ public class BookPDFView extends AppCompatActivity {
                     bnp.success();
                 }
                 if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()==1){
-                    bnp.setVisibility(View.GONE);
+//                    bnp.setVisibility(View.GONE);
                 }
                 if(!isOnline()){
                     bnp.fail();
@@ -161,6 +177,8 @@ public class BookPDFView extends AppCompatActivity {
             }
         });
     }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
