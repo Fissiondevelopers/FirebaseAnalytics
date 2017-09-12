@@ -19,5 +19,11 @@
         <!--ads:adSize="BANNER"-->
         <!--ads:adUnitId="@string/banner_ad_unit_id">-->
     <!--</com.google.android.gms.ads.AdView>-->
+    <is.arontibo.library.ElasticDownloadView
+        android:id="@+id/elastic_download_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"/>
+
 
 </RelativeLayout>

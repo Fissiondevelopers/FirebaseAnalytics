@@ -1,9 +1,13 @@
 package com.jetslice.referncert;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -11,10 +15,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import is.arontibo.library.ElasticDownloadView;
 
 public class BookPDFView extends AppCompatActivity {
     private StorageReference mStorageRef;
@@ -24,6 +31,7 @@ public class BookPDFView extends AppCompatActivity {
     String bookname;
     int clsno, chapterno;
     static int adfreq = 0;
+    private ElasticDownloadView bnp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,7 @@ public class BookPDFView extends AppCompatActivity {
     }
 
     private void dotask(int clsno, final String booknamex, final String chpno) {
+        bnp= (ElasticDownloadView) findViewById(R.id.elastic_download_view);
         StorageReference riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
         File rootPath = new File("/sdcard/ReferNcert/Class "+clsno+"/"+booknamex+"/");
         if(!rootPath.exists()) {
@@ -108,6 +117,7 @@ public class BookPDFView extends AppCompatActivity {
         String savingName=chapterset.get(chapterno)+".pdf";
 
         localFile = new File(rootPath,savingName);
+        bnp.startIntro();
 
 
 
@@ -119,19 +129,54 @@ public class BookPDFView extends AppCompatActivity {
                         //Add Progress Bar here
                         loadinpdf(localFile);
                         Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
+                        bnp.onEnterAnimationFinished();
+                        bnp.success();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(getBaseContext(), "Failed" + exception, Toast.LENGTH_SHORT).show();
+                bnp.fail();
+            }
+        }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            @SuppressWarnings("VisibleForTests")
+            public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Double progress = (100.0 * taskSnapshot.getBytesTransferred())/ taskSnapshot.getTotalByteCount();
+                Log.d("BookPDFView","onProgress: The value of the max is: "+taskSnapshot.getTotalByteCount());
+                Log.d("BookPDFView","onProgress: The progress is: "+progress);
+                if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()<1) {
+                    bnp.setProgress((float) Math.floor(progress));
+                }
+                if((taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()==0.99)){
+                    bnp.success();
+                }
+                if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()==1){
+                    bnp.setVisibility(View.GONE);
+                }
+                if(!isOnline()){
+                    bnp.fail();
+                    Toast.makeText(BookPDFView.this, "Network not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 
     //TODO
     // Stop download on back pressed
     private void loadinpdf(File localFile) {
         pdfView.fromFile(localFile).load();
+    }
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
 }
