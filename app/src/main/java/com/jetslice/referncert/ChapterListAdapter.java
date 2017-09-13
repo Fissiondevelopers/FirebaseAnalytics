@@ -22,6 +22,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     String bookname;
     int clsno;
 
+
     public ChapterListAdapter(ArrayList<String> chapterlist, Context context, String book, int clsno) {
         this.chapterlist = chapterlist;
         this.context = context;
@@ -50,6 +51,8 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 i.putExtra("iClassno",clsno);
                 i.putExtra("iChapter",position);
                 context.startActivity(i);
+
+
             }
         });
     }

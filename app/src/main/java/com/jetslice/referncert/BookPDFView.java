@@ -1,6 +1,7 @@
 package com.jetslice.referncert;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -35,7 +36,9 @@ public class BookPDFView extends AppCompatActivity {
     int clsno, chapterno;
     static int adfreq = 0;
     private ElasticDownloadView bnp;
-    private AdView mAdView;
+    private AdView mAdView;                SharedPreferences sp;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +52,12 @@ public class BookPDFView extends AppCompatActivity {
         clsno = getIntent().getIntExtra("iClassno", 4);
         chapterno = getIntent().getIntExtra("iChapter", 3);
         chapterset = getchapterset();
-        Toast.makeText(getBaseContext(), "Class " + clsno + "/" + bookname.trim() + "/" + chapterset.get(chapterno) + ".pdf", Toast.LENGTH_SHORT).show();
+        sp=getSharedPreferences("LatestRead",MODE_PRIVATE);
+
+//        Toast.makeText(getBaseContext(), "Class " + clsno + "/" + bookname.trim() + "/" + chapterset.get(chapterno) + ".pdf", Toast.LENGTH_SHORT).show();
         String url = "Class " + clsno + "/" + bookname + "/" + chapterset.get(chapterno) + ".pdf";
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Toast.makeText(getBaseContext(),"Ad loaded "+adfreq,Toast.LENGTH_SHORT).show();
-                ++adfreq;
-            }
-        });
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -189,6 +187,12 @@ public class BookPDFView extends AppCompatActivity {
     // Stop download on back pressed
     private void loadinpdf(File localFile) {
         pdfView.fromFile(localFile).load();
+        int chapx=chapterno+1;
+        SharedPreferences.Editor saver=sp.edit();
+        saver.putInt("spClassno",clsno);
+        saver.putString("spBookname",bookname.trim());
+        saver.putInt("spChapno",chapx);
+        saver.commit();
     }
     public boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
