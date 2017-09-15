@@ -36,8 +36,9 @@ public class BookPDFView extends AppCompatActivity {
     int clsno, chapterno;
     static int adfreq = 0;
     private ElasticDownloadView bnp;
-    private AdView mAdView;                SharedPreferences sp;
-
+    private AdView mAdView;
+    SharedPreferences sp;
+    StorageReference riversRef;
 
 
     @Override
@@ -56,23 +57,11 @@ public class BookPDFView extends AppCompatActivity {
 
 //        Toast.makeText(getBaseContext(), "Class " + clsno + "/" + bookname.trim() + "/" + chapterset.get(chapterno) + ".pdf", Toast.LENGTH_SHORT).show();
         String url = "Class " + clsno + "/" + bookname + "/" + chapterset.get(chapterno) + ".pdf";
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Toast.makeText(getBaseContext(),"Ad Count = "+adfreq,Toast.LENGTH_SHORT).show();
-                ++adfreq;
-
-            }
-
-        });
         File loadfile=new File("/sdcard/ReferNcert/Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(chapterno)+".pdf");
         if(loadfile.exists()){
             loadinpdf(loadfile);
             bnp.setVisibility(View.GONE);
             pdfView.setVisibility(View.VISIBLE);
-            //TODO: add indicator in chapter card view signifying that file is already downloaded
         }else
         {
             Log.e("SA", "FSFSF");
@@ -80,6 +69,8 @@ public class BookPDFView extends AppCompatActivity {
 
         }
         getWindow().setBackgroundDrawable(null);
+
+
     }
 
     private ArrayList<String> getchapterset() {
@@ -124,7 +115,7 @@ public class BookPDFView extends AppCompatActivity {
     }
 
     private void dotask(int clsno, final String booknamex, final String chpno) {
-        StorageReference riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
+        riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
         File rootPath = new File("/sdcard/ReferNcert/Class "+clsno+"/"+booknamex+"/");
         if(!rootPath.exists()) {
             rootPath.mkdirs();
@@ -146,6 +137,17 @@ public class BookPDFView extends AppCompatActivity {
                         bnp.onEnterAnimationFinished();
                         bnp.success();
                         bnp.setVisibility(View.GONE);
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        mAdView.loadAd(adRequest);
+                        mAdView.setAdListener(new AdListener() {
+                            @Override
+                            public void onAdLoaded() {
+                                Toast.makeText(getBaseContext(),"Ad Count = "+adfreq,Toast.LENGTH_SHORT).show();
+                                ++adfreq;
+
+                            }
+
+                        });
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -169,8 +171,9 @@ public class BookPDFView extends AppCompatActivity {
                 if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()==1){
 //                    bnp.setVisibility(View.GONE);
                 }
-                if(!isOnline()){
+                if(!isOnline() && (taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()!=0.99)){
                     bnp.fail();
+                    localFile.delete();
                     Toast.makeText(BookPDFView.this, "Network not available", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -178,13 +181,13 @@ public class BookPDFView extends AppCompatActivity {
     }
 
 
+    // Todo add notification which shows progress of download in it
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
     }
 
-    //TODO
     // Stop download on back pressed
     private void loadinpdf(File localFile) {
         pdfView.fromFile(localFile).load();
