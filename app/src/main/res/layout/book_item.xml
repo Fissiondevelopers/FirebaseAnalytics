@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:orientation="vertical"
     >
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_marginBottom="16dp"
         card_view:cardCornerRadius="9dp"
         card_view:cardElevation="3dp"
@@ -19,49 +19,43 @@
         card_view:theme="@style/Base.CardView">
 
 
-        <RelativeLayout
+        <android.support.v7.widget.AppCompatImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/book_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="50dp"
+            android:paddingBottom="30dp"
+            card_view:srcCompat="@drawable/penx"/>
+
+
+        <LinearLayout
+            android:layout_gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <ImageView
-                android:id="@+id/book_pic"
-                android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="#e040fb"
+            android:orientation="horizontal"
+            android:weightSum="100">
+            <Button
+                android:background="@android:color/transparent"
+                android:id="@+id/book_name"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingBottom="30dp"
-                card_view:srcCompat="@drawable/penx"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_weight="80"
+                android:paddingLeft="8dp"
+                android:text="Book NAme"
+                android:textColor="@color/white"/>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:weightSum="100"
-                    android:background="#e040fb">
-                    <TextView
-                        android:paddingLeft="8dp"
-                        android:text="Book NAme"
-                        android:textColor="@color/white"
-                        android:id="@+id/book_name"
-                        android:layout_weight="75"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-                    <Button
-                        android:id="@+id/open_book"
-                        android:background="@drawable/ic_open_in_new_black_24dp"
-                        android:layout_weight="25"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"/>
-                </LinearLayout>
-            </FrameLayout>
-        </RelativeLayout>
+            <Button
+                android:id="@+id/open_book"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:background="@drawable/ic_open_in_new_black_24dp"/>
+        </LinearLayout>
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

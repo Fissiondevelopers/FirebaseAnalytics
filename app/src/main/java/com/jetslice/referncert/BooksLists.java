@@ -40,6 +40,7 @@ public class BooksLists extends AppCompatActivity {
         rView.setLayoutManager(BookLayout);
         BookListAdapter rcAdapter = new BookListAdapter(Books_name,this,clsno);
         rView.setAdapter(rcAdapter);
+        getWindow().setBackgroundDrawable(null);
     }
 
     private ArrayList<String> getBooksNames(int clsno) throws IOException {

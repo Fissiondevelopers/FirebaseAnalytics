@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -65,9 +64,9 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
     public class RecyclerViewHoldersx extends RecyclerView.ViewHolder {
 
 
-        TextView bookname;
+        Button bookname;
         Button bookopen;
-        ImageView bookimage;
+        ImageButton bookimage;
 
         public RecyclerViewHoldersx(View itemView) {
             super(itemView);

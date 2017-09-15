@@ -3,6 +3,7 @@ package com.jetslice.referncert;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import java.io.BufferedReader;
@@ -32,9 +33,10 @@ public class ChapterList extends AppCompatActivity {
         BookLayout = new GridLayoutManager(this, 2);
         RecyclerView rView = (RecyclerView) findViewById(R.id.rv_chapter_list);
         rView.setHasFixedSize(true);
-        rView.setLayoutManager(BookLayout);
+        rView.setLayoutManager(new LinearLayoutManager(this));
         ChapterListAdapter rcAdapter = new ChapterListAdapter(chapterlist,this,book,clsno);
         rView.setAdapter(rcAdapter);
+        getWindow().setBackgroundDrawable(null);
 
     }
 

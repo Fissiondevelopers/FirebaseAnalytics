@@ -79,6 +79,7 @@ public class BookPDFView extends AppCompatActivity {
             dotask(clsno,bookname.trim(),chapterset.get(chapterno));
 
         }
+        getWindow().setBackgroundDrawable(null);
     }
 
     private ArrayList<String> getchapterset() {
@@ -200,5 +201,5 @@ public class BookPDFView extends AppCompatActivity {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
-
+//TODO delete file if not downloded completely
 }

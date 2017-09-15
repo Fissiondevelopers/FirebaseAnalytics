@@ -46,6 +46,7 @@ public class LAstOpenedbook extends AppCompatActivity {
         } else {
             Toast.makeText(getBaseContext(),"File not found.",Toast.LENGTH_SHORT).show();
         }
+        getWindow().setBackgroundDrawable(null);
     }
     private ArrayList<String> getchapterset() {
         ArrayList<String> chapters = new ArrayList<>();

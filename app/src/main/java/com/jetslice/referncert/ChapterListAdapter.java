@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -43,6 +45,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
         Animation declerateX = AnimationUtils.loadAnimation(context, R.anim.chapters_anim);
         holder.chapname.startAnimation(declerateX);
+        ArrayList<String> chapterset=getChapterList();
+        File loadfile=new File("/sdcard/ReferNcert/Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(position)+".pdf");
+        if(loadfile.exists()){
+            holder.checkProg.setImageResource(R.mipmap.download_completed);
+        }
         holder.chapname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,10 +58,48 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 i.putExtra("iClassno",clsno);
                 i.putExtra("iChapter",position);
                 context.startActivity(i);
-
-
             }
         });
+    }
+
+    private ArrayList<String> getChapterList() {
+        ArrayList<String> chapters = new ArrayList<>();
+        chapters.add("Chapter01");
+        chapters.add("Chapter02");
+        chapters.add("Chapter03");
+        chapters.add("Chapter04");
+        chapters.add("Chapter05");
+        chapters.add("Chapter06");
+        chapters.add("Chapter07");
+        chapters.add("Chapter08");
+        chapters.add("Chapter09");
+        chapters.add("Chapter10");
+        chapters.add("Chapter11");
+        chapters.add("Chapter12");
+        chapters.add("Chapter13");
+        chapters.add("Chapter14");
+        chapters.add("Chapter15");
+        chapters.add("Chapter16");
+        chapters.add("Chapter17");
+        chapters.add("Chapter18");
+        chapters.add("Chapter19");
+        chapters.add("Chapter20");
+        chapters.add("Chapter21");
+        chapters.add("Chapter22");
+        chapters.add("Chapter23");
+        chapters.add("Chapter24");
+        chapters.add("Chapter25");
+        chapters.add("Chapter26");
+        chapters.add("Chapter27");
+        chapters.add("Chapter28");
+        chapters.add("Chapter29");
+        chapters.add("Chapter30");
+        chapters.add("Chapter31");
+        chapters.add("Chapter32");
+        chapters.add("Chapter33");
+        chapters.add("Chapter34");
+        chapters.add("Chapter35");
+        return chapters;
     }
 
     @Override
@@ -63,12 +108,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public class ChapterViewHolder extends RecyclerView.ViewHolder {
-        TextView chapname;
+        Button chapname;
+        ImageView checkProg;
 
         public ChapterViewHolder(View itemView) {
             super(itemView);
             chapname = itemView.findViewById(R.id.chapter_name);
-
+            checkProg=itemView.findViewById(R.id.ivcheck);
         }
     }
 }
