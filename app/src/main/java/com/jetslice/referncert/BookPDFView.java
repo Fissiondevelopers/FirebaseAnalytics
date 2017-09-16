@@ -69,8 +69,7 @@ public class BookPDFView extends AppCompatActivity {
 
         }
         getWindow().setBackgroundDrawable(null);
-
-
+        getSupportActionBar().setTitle("|"+bookname+">"+chapterset.get(chapterno));
     }
 
     private ArrayList<String> getchapterset() {
@@ -180,15 +179,10 @@ public class BookPDFView extends AppCompatActivity {
         });
     }
 
-
-    // Todo add notification which shows progress of download in it
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-    // Stop download on back pressed
     private void loadinpdf(File localFile) {
         pdfView.fromFile(localFile).load();
         int chapx=chapterno+1;
@@ -204,5 +198,4 @@ public class BookPDFView extends AppCompatActivity {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
-//TODO delete file if not downloded completely
 }

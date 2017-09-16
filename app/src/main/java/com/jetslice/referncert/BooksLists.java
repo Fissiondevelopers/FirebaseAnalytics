@@ -6,7 +6,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +40,7 @@ public class BooksLists extends AppCompatActivity {
         BookListAdapter rcAdapter = new BookListAdapter(Books_name,this,clsno);
         rView.setAdapter(rcAdapter);
         getWindow().setBackgroundDrawable(null);
+        getSupportActionBar().setTitle("Class "+clsno);
     }
 
     private ArrayList<String> getBooksNames(int clsno) throws IOException {
@@ -61,7 +61,6 @@ public class BooksLists extends AppCompatActivity {
         removeDup(classBooks);
         return classBooks;
     }
-
     private ArrayList<String> removeDup(ArrayList<String> al) {
         Set<String> hs = new HashSet<>();
         hs.addAll(al);
