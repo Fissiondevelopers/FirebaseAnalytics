@@ -131,7 +131,7 @@ public class BookPDFView extends AppCompatActivity {
 
     }
 
-    private void dotask(int clsno, final String booknamex, final String chpno) {
+    private void dotask(final int clsno, final String booknamex, final String chpno) {
         riversRef = mStorageRef.child("Class "+clsno+"/"+booknamex+"/"+chpno+".pdf");
         File rootPath = new File("/sdcard/ReferNcert/Class "+clsno+"/"+booknamex+"/");
         if(!rootPath.exists()) {
@@ -204,7 +204,7 @@ public class BookPDFView extends AppCompatActivity {
 
                 bnp.setProgress((float) Math.floor(progress));
                 mBuilder.setContentText("Downloading...")
-                        .setContentTitle("Class book")
+                        .setContentTitle("Class "+clsno+"book "+bookname)
                         .setProgress(100, (int) Math.floor(progress), false);
                 mNotifyManager.notify(Notifyid, mBuilder.build());
                 if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()<1) {
