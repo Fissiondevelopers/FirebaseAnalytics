@@ -60,11 +60,12 @@ public class BookPDFView extends AppCompatActivity {
 
 
                 .setSmallIcon(R.mipmap.ic_launcher_round);
-        mNotifyManager.notify(Notifyid,mBuilder.build());
+
 
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         bnp= (ElasticDownloadView) findViewById(R.id.elastic_download_view);
+
         pdfView = (PDFView) findViewById(R.id.pdfView);
         bookname = getIntent().getStringExtra("iBookname");
         clsno = getIntent().getIntExtra("iClassno", 4);
@@ -218,6 +219,7 @@ public class BookPDFView extends AppCompatActivity {
 //                    bnp.setVisibility(View.GONE);
                 }
 
+
                 if(!isOnline() && (taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()!=0.99)){
                     bnp.fail();
                     localFile.delete();
@@ -227,7 +229,10 @@ public class BookPDFView extends AppCompatActivity {
                             .setProgress(0,0,false);
                     mNotifyManager.notify(Notifyid,mBuilder.build());
                     Toast.makeText(BookPDFView.this, "Network not available", Toast.LENGTH_SHORT).show();
+                } if(localFile.length()==Maxfile && localFile.exists()){
+                    mNotifyManager.cancel(Notifyid);
                 }
+
 
 
 
@@ -281,6 +286,7 @@ public class BookPDFView extends AppCompatActivity {
 
 
     }
+
 
     //TODO notification should show download error if network is discnnected
     // // TODO: 9/17/2017  notification should destroy once app exit
