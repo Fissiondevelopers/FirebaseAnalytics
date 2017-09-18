@@ -44,10 +44,9 @@ public class BookPDFView extends AppCompatActivity {
     StorageReference riversRef;
     NotificationManager mNotifyManager;
     NotificationCompat.Builder mBuilder;
-    Intent resultIntent;
-    PendingIntent resultpendingIntent;
+    Intent resultIntent,resultIntent1;
+    PendingIntent resultpendingIntent,resultpendingIntent1;
     private int Notifyid = 1;
-    private int Notifyid2=2;
     private long Maxfile;
 
 
@@ -59,8 +58,9 @@ public class BookPDFView extends AppCompatActivity {
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(BookPDFView.this)
 
-                .setContentTitle("Download in Progress")
+
                 .setSmallIcon(R.mipmap.ic_launcher_round);
+        mNotifyManager.notify(Notifyid,mBuilder.build());
 
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -180,11 +180,16 @@ public class BookPDFView extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                resultIntent1 = new Intent(BookPDFView.this,MainActivity.class);
+                resultpendingIntent1 = PendingIntent.getActivity(BookPDFView.this,0,resultIntent1,PendingIntent.FLAG_UPDATE_CURRENT);
                 Toast.makeText(getBaseContext(), "Failed" + exception, Toast.LENGTH_SHORT).show();
                 bnp.fail();
                 mBuilder.setProgress(0,0,false)
                         .setContentText("Try again")
-                        .setContentTitle("Download failed");
+                        .setContentTitle("Download failed")
+                        .setContentIntent(resultpendingIntent1)
+                        .setColor(getResources().getColor(R.color.red_wine));
+
                 mNotifyManager.notify(Notifyid,mBuilder.build());
 
             }
@@ -197,13 +202,13 @@ public class BookPDFView extends AppCompatActivity {
                 Log.d("BookPDFView","onProgress: The value of the max is: "+taskSnapshot.getTotalByteCount());
                 Log.d("BookPDFView","onProgress: The progress is: "+progress);
 
-
+                bnp.setProgress((float) Math.floor(progress));
+                mBuilder.setContentText("Downloading...")
+                        .setContentTitle("Class book")
+                        .setProgress(100, (int) Math.floor(progress), false);
+                mNotifyManager.notify(Notifyid, mBuilder.build());
                 if(taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()<1) {
-                    bnp.setProgress((float) Math.floor(progress));
-                    mBuilder.setContentText("Downloading...")
-                            .setContentTitle("Class book")
-                            .setProgress(100, (int) Math.floor(progress), false);
-                    mNotifyManager.notify(Notifyid, mBuilder.build());
+
                 }
                 if((taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount()==0.99)){
                     bnp.success();
@@ -220,7 +225,7 @@ public class BookPDFView extends AppCompatActivity {
                     mBuilder.setContentText("Network not available")
                             .setContentTitle("Download failed")
                             .setProgress(0,0,false);
-                    mNotifyManager.notify(Notifyid2,mBuilder.build());
+                    mNotifyManager.notify(Notifyid,mBuilder.build());
                     Toast.makeText(BookPDFView.this, "Network not available", Toast.LENGTH_SHORT).show();
                 }
 
@@ -276,7 +281,7 @@ public class BookPDFView extends AppCompatActivity {
 
 
     }
-    //TODO delete file if not downloded completely
+
     //TODO notification should show download error if network is discnnected
     // // TODO: 9/17/2017  notification should destroy once app exit
     // TODO: 9/17/2017  when download is completed the notification click should open the app
