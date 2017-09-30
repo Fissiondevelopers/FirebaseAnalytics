@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "505823726909",
+    "firebase_url": "https://referncert.firebaseio.com",
+    "project_id": "referncert",
+    "storage_bucket": "referncert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505823726909:android:5d40ebcdae7fac94",
+        "android_client_info": {
+          "package_name": "com.jetslice.referncert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505823726909-efglqeqdfjpvtbk67fidpnmkfgb31e3a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jetslice.referncert",
+            "certificate_hash": "52f022aad48f0128fa379bb350edbd17d925eb96"
+          }
+        },
+        {
+          "client_id": "505823726909-2dhfrd5jvklmj64rsauj9b6nret85iot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz3GUQWwhklK08AV2tIr32HpyyviPBF3Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505823726909-2dhfrd5jvklmj64rsauj9b6nret85iot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
