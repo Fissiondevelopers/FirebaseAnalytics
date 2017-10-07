@@ -2,6 +2,9 @@ package com.jetslice.referncert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +14,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.github.lzyzsd.randomcolor.RandomColor;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by shubham on 6/9/17.
@@ -42,12 +50,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @Override
     public void onBindViewHolder(ChapterListAdapter.ChapterViewHolder holder, final int position) {
         holder.chapname.setText("" + chapterlist.get(position));
-
         Animation declerateX = AnimationUtils.loadAnimation(context, R.anim.chapters_anim);
         holder.chapname.startAnimation(declerateX);
         ArrayList<String> chapterset=getChapterList();
         File loadfile=new File("/sdcard/ReferNcert/Class "+clsno+"/"+bookname.trim()+"/"+chapterset.get(position)+".pdf");
-        if(loadfile.exists()){
+        SharedPreferences peditor = context.getSharedPreferences("FileBitSize", MODE_PRIVATE);
+        boolean filesizesequal= (peditor.getLong("size_"+clsno+bookname.trim()+position,404)==loadfile.length());
+        if(loadfile.exists() && filesizesequal){
             holder.checkProg.setImageResource(R.mipmap.download_completed);
         }
         holder.chapname.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +69,44 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 context.startActivity(i);
             }
         });
+
+        RandomColor randomColoar = new RandomColor();
+//        int color = randomColor.randomColor();
+
+        holder.chapname.setBackgroundColor(generateRandomColor());
+        holder.cv_item.setCardBackgroundColor(generateRandomColorCard());
+
+    }
+
+    public int generateRandomColor() {
+        // This is the base color which will be mixed with the generated osne
+        final Random mRandom = new Random(System.currentTimeMillis());
+        final int baseColor = Color.TRANSPARENT;
+
+        final int baseRed = Color.red(baseColor);
+        final int baseGreen = Color.green(baseColor);
+        final int baseBlue = Color.blue(baseColor);
+
+        final int red = (int) ((baseRed + mRandom.nextInt(256)) /1);
+        final int green = (int) ((baseGreen + mRandom.nextInt(256)) / 1);
+        final int blue = (int) ((baseBlue + mRandom.nextInt(256)) / 1);
+
+        return Color.rgb(red, green, blue);
+    }
+    public int generateRandomColorCard() {
+        // This is the base color which will be mixed with the generated osne
+        final Random mRandom = new Random(System.currentTimeMillis());
+        final int baseColor = Color.WHITE;
+
+        final int baseRed = Color.red(baseColor);
+        final int baseGreen = Color.green(baseColor);
+        final int baseBlue = Color.blue(baseColor);
+
+        final int red = (int) ((baseRed + mRandom.nextInt(256)) /2);
+        final int green = (int) ((baseGreen + mRandom.nextInt(256)) / 2);
+        final int blue = (int) ((baseBlue + mRandom.nextInt(256)) / 2);
+
+        return Color.rgb(red, green, blue);
     }
 
     private ArrayList<String> getChapterList() {
@@ -110,11 +157,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public class ChapterViewHolder extends RecyclerView.ViewHolder {
         Button chapname;
         ImageView checkProg;
+        CardView cv_item;
 
         public ChapterViewHolder(View itemView) {
             super(itemView);
             chapname = itemView.findViewById(R.id.chapter_name);
             checkProg=itemView.findViewById(R.id.ivcheck);
+            cv_item=itemView.findViewById(R.id.chapter_item);
         }
     }
 }

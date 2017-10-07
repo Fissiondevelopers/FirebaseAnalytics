@@ -36,7 +36,6 @@ public class ChapterList extends AppCompatActivity {
         rView.setLayoutManager(new LinearLayoutManager(this));
         ChapterListAdapter rcAdapter = new ChapterListAdapter(chapterlist,this,book,clsno);
         rView.setAdapter(rcAdapter);
-        getWindow().setBackgroundDrawable(null);
         getSupportActionBar().setTitle(""+book);
     }
 

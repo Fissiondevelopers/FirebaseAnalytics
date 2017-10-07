@@ -2,6 +2,8 @@ package com.jetslice.referncert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +12,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by shubham on 6/9/17.
@@ -53,6 +57,40 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
                 Toast.makeText(context, "" + chaptername, Toast.LENGTH_SHORT).show();
             }
         });
+        String img=clsno+"_"+holder.bookname.getText().toString().trim();
+        holder.ll.setBackgroundColor(generateRandomColor());
+        holder.cvbook.setCardBackgroundColor(generateRandomColorCard());
+
+    }
+    public int generateRandomColor() {
+        // This is the base color which will be mixed with the generated osne
+        final Random mRandom = new Random(System.currentTimeMillis());
+        final int baseColor = Color.TRANSPARENT;
+
+        final int baseRed = Color.red(baseColor);
+        final int baseGreen = Color.green(baseColor);
+        final int baseBlue = Color.blue(baseColor);
+
+        final int red = (int) ((baseRed + mRandom.nextInt(256)) /1);
+        final int green = (int) ((baseGreen + mRandom.nextInt(256)) / 1);
+        final int blue = (int) ((baseBlue + mRandom.nextInt(256)) / 1);
+
+        return Color.rgb(red, green, blue);
+    }
+    public int generateRandomColorCard() {
+        // This is the base color which will be mixed with the generated osne
+        final Random mRandom = new Random(System.currentTimeMillis());
+        final int baseColor = Color.WHITE;
+
+        final int baseRed = Color.red(baseColor);
+        final int baseGreen = Color.green(baseColor);
+        final int baseBlue = Color.blue(baseColor);
+
+        final int red = (int) ((baseRed + mRandom.nextInt(256)) /2);
+        final int green = (int) ((baseGreen + mRandom.nextInt(256)) / 2);
+        final int blue = (int) ((baseBlue + mRandom.nextInt(256)) / 2);
+
+        return Color.rgb(red, green, blue);
     }
 
     @Override
@@ -67,12 +105,16 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
         Button bookname;
         Button bookopen;
         ImageButton bookimage;
+        LinearLayout ll;
+        CardView cvbook;
 
         public RecyclerViewHoldersx(View itemView) {
             super(itemView);
             bookname = itemView.findViewById(R.id.book_name);
             bookopen = itemView.findViewById(R.id.open_book);
             bookimage = itemView.findViewById(R.id.book_pic);
+            ll=itemView.findViewById(R.id.bookll);
+            cvbook=itemView.findViewById(R.id.book_card);
 
         }
     }

@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 getPermission1();
             }
         });
-        getWindow().setBackgroundDrawable(null);
     }
 
     private void getPermission1() {
@@ -317,16 +316,23 @@ public class MainActivity extends AppCompatActivity {
         }
         String chaptername = chapterset.get(vchapno);
         File loadfile = new File("/sdcard/ReferNcert/Class " + prefs.getInt("spClassno", clsno) + "/" + booknamer + "/" + chaptername + ".pdf");
-        if ( (!loadfile.exists()) || (prefs.getString("spBookname", Bookname)==null  && prefs.getInt("spClassno", clsno)==0 && prefs.getInt("spChapno", chapterno)==0)) {
+        SharedPreferences peditor = getSharedPreferences("FileBitSize", MODE_PRIVATE);
+        boolean filesizesequal= (peditor.getLong("size_"+prefs.getInt("spClassno", clsno)+booknamer.trim()+vchapno,404)==loadfile.length());
+        Log.e("tt", "doOpenLibStuff: ooooooooooooooooo "+filesizesequal);
+        if ( (!loadfile.exists()) || (prefs.getString("spBookname", Bookname)==null  && prefs.getInt("spClassno", clsno)==0 && prefs.getInt("spChapno", chapterno)==0))  {
             Toast.makeText(getBaseContext(),"No last read file saved or file may be deleted from storage.Try Redownloading it.",Toast.LENGTH_SHORT).show();
         }
-        else{
+        else if(filesizesequal){
             Intent toPDFScreen = new Intent(MainActivity.this, LAstOpenedbook.class);
             toPDFScreen.putExtra("jBookname", prefs.getString("spBookname", Bookname));
             toPDFScreen.putExtra("jClassno", prefs.getInt("spClassno", clsno));
             toPDFScreen.putExtra("jChapter", prefs.getInt("spChapno", chapterno));
             startActivity(toPDFScreen);
         }
+        else{
+            Toast.makeText(getBaseContext(),"No last read file saved or file may be deleted from storage.Try Redownloading it.",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private ArrayList<String> getChapterArray() {

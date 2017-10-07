@@ -32,6 +32,10 @@
         </activity>
         <activity android:name=".LAstOpenedbook">
         </activity>
+
+        <service
+            android:name=".OnClearFromRecentService"
+            android:stopWithTask="false"/>
     </application>
 
 </manifest>

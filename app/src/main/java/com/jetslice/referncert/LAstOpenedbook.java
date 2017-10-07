@@ -1,15 +1,19 @@
 package com.jetslice.referncert;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
 import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
 import java.io.File;
 import java.util.ArrayList;
+
 public class LAstOpenedbook extends AppCompatActivity {
     ArrayList<String> chapterset;
     PDFView pdfView;
@@ -18,10 +22,12 @@ public class LAstOpenedbook extends AppCompatActivity {
     static int adfreq = 0;
     private AdView mAdView;
     SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_last_openedbook);
+
         prefs = getSharedPreferences("LatestRead", MODE_PRIVATE);
         mAdView = (AdView) findViewById(R.id.lastadView);
         pdfView = (PDFView) findViewById(R.id.lastpdfView);
@@ -40,14 +46,22 @@ public class LAstOpenedbook extends AppCompatActivity {
         int vchapno = prefs.getInt("spChapno", chapterno) - 1;
         String chapterw = chapterset.get(vchapno);
         File loadfile = new File("/sdcard/ReferNcert/Class " + clsnow + "/" + booknamew + "/" + chapterw + ".pdf");
+//        SharedPreferences peditor = getSharedPreferences("FileBitSize", MODE_PRIVATE);
+//        boolean filesizesequal= (peditor.getLong("size_"+clsnow+booknamew.trim()+vchapno,404)==loadfile.length());
+//        Log.e("Ddd", " -----=================== StorageFileSize "+loadfile.length());
+//        Log.e("Ddd", " -----=================== TotalFileSize "+peditor.getLong("size_"+clsnow+booknamew.trim()+vchapno,404));
+//        Log.e("Ddd", " -----=================== TotalFileSize "+filesizesequal);
+
+
         if (loadfile.exists()) {
-            pdfView.setVisibility(View.VISIBLE);
-            loadinpdf(loadfile);
+                pdfView.setVisibility(View.VISIBLE);
+                loadinpdf(loadfile);
         } else {
-            Toast.makeText(getBaseContext(),"File not found.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "File not found.Or may not be Downloaded Completely", Toast.LENGTH_SHORT).show();
         }
         getWindow().setBackgroundDrawable(null);
     }
+
     private ArrayList<String> getchapterset() {
         ArrayList<String> chapters = new ArrayList<>();
         chapters.add("Chapter01");
@@ -92,7 +106,6 @@ public class LAstOpenedbook extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
     }
 
     private void loadinpdf(File localFile) {
