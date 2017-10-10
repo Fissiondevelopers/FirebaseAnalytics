@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BooksLists extends AppCompatActivity {
-    private GridLayoutManager BookLayout;
     ArrayList<String> Books_name;
 
 
@@ -33,13 +33,11 @@ public class BooksLists extends AppCompatActivity {
         for (int i = 0; i < Books_name.size(); i++) {
             Log.e("ff", "Ere   " + Books_name.get(i));
         }
-        BookLayout = new GridLayoutManager(this, 2);
         RecyclerView rView = (RecyclerView) findViewById(R.id.rv_book_list);
-        rView.setHasFixedSize(true);
-        rView.setLayoutManager(BookLayout);
+//        rView.setHasFixedSize(true);
+        rView.setLayoutManager(new GridLayoutManager(this,2));
         BookListAdapter rcAdapter = new BookListAdapter(Books_name,this,clsno);
         rView.setAdapter(rcAdapter);
-        getWindow().setBackgroundDrawable(null);
         getSupportActionBar().setTitle("Class "+clsno);
     }
 

@@ -23,6 +23,7 @@ public class ClassScreen extends AppCompatActivity {
         rView.setLayoutManager(lLayout);
         AllClassesAdapter rcAdapter = new AllClassesAdapter(this, rowListItem);
         rView.setAdapter(rcAdapter);
+
     }
 
     private List<String> getAllItemList(){

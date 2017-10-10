@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
     @Override
     public BookListAdapter.RecyclerViewHoldersx onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_item, null);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_itemx, null);
         Animation slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
         layoutView.startAnimation(slideUpAnimation);
         RecyclerViewHoldersx rcv = new RecyclerViewHoldersx(layoutView);
@@ -46,7 +44,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
     @Override
     public void onBindViewHolder(final BookListAdapter.RecyclerViewHoldersx holder, int position) {
         holder.bookname.setText("" + itemList.get(position));
-        holder.bookopen.setOnClickListener(new View.OnClickListener() {
+        holder.cvbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String chaptername = holder.bookname.getText().toString();
@@ -57,8 +55,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
                 Toast.makeText(context, "" + chaptername, Toast.LENGTH_SHORT).show();
             }
         });
-        String img=clsno+"_"+holder.bookname.getText().toString().trim();
-        holder.ll.setBackgroundColor(generateRandomColor());
+        holder.cvbook.setBackgroundColor(generateRandomColor());
         holder.cvbook.setCardBackgroundColor(generateRandomColorCard());
 
     }
@@ -100,22 +97,19 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Recycl
 
 
     public class RecyclerViewHoldersx extends RecyclerView.ViewHolder {
-
-
-        Button bookname;
-        Button bookopen;
-        ImageButton bookimage;
-        LinearLayout ll;
+        TextView bookname;
+//        Button bookopen;
+//        ImageButton bookimage;
+//        LinearLayout ll;
         CardView cvbook;
 
         public RecyclerViewHoldersx(View itemView) {
             super(itemView);
-            bookname = itemView.findViewById(R.id.book_name);
-            bookopen = itemView.findViewById(R.id.open_book);
-            bookimage = itemView.findViewById(R.id.book_pic);
-            ll=itemView.findViewById(R.id.bookll);
-            cvbook=itemView.findViewById(R.id.book_card);
-
+            bookname = itemView.findViewById(R.id.tvbookx);
+//            bookopen = itemView.findViewById(R.id.open_book);
+//            bookimage = itemView.findViewById(R.id.book_pic);
+//            ll=itemView.findViewById(R.id.bookll);
+            cvbook=itemView.findViewById(R.id.book_cardx);
         }
     }
 }
